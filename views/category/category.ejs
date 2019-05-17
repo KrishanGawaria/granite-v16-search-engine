@@ -1,0 +1,46 @@
+<% include ../partials/header %>
+
+
+
+
+    <div class="below-nav-group-title">
+      Business Categories
+    </div>
+
+
+
+    <div class="middle-row-section">
+
+      <div class="left-nav">
+
+      </div>
+
+
+      <div class="main-section">
+
+        <!-- DISPLAYING INTERESTED CATEGORIES OF CURRENT USER -->
+        <%currentUser.interested_categories.forEach(function(categoryName){%>
+          <div class="main-section-item flex-content-row">
+              <%=categoryName%><a href="/<%=currentUser._id%>/category/remove/<%=categoryName%>"> Remove</a>
+          </div>
+        <%})%>
+
+        <%# DISPLAYING TO ADD CATEGORIES %>
+        <%foundCategories.forEach(function(Category){%>
+          <div class="main-section-item flex-content-row">
+            <%=Category.name%><a href="/<%=currentUser._id%>/category/add/<%=Category.name%>"> Add</a>
+          </div>
+        <%})%>
+
+
+
+
+      </div>
+
+
+
+      <div class="right-nav">
+
+      </div>
+
+    </div>

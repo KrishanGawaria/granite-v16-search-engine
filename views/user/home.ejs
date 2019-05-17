@@ -1,0 +1,128 @@
+<% include ../partials/header %>
+
+
+
+    <div class="middle-row-section">
+
+      <div class="left-nav">
+        <div class="left-nav-item"><a href="/<%=currentUser._id%>/explore">Explore</a></div>
+        <div class="left-nav-item"><a href="/<%=currentUser._id%>/shared-inventory">Shared By Others</a></div>
+        <div class="left-nav-item"><a href="/<%=currentUser._id%>/blocked-by-others">Blocked By Others</a></div>
+        <div class="left-nav-item"><a href="/<%=currentUser._id%>/others-interests">Others Interests</a></div>
+      </div>
+
+      <div class="main-section">
+
+        <div class="main-section-item">
+          <form action="/<%=currentUser._id%>/post" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label>Write Post</label>
+              <textarea class="form-control" name="post" rows="4" cols="80" placeholder="Type Post Here..."></textarea>
+            </div>
+
+
+            <div class="custom-file">
+              <input type="file" name="userPhoto" multiple>
+
+            </div>
+
+
+
+            <div class="form-group" style="margin-top:20px;">
+              Show Acess:
+              <input style="margin-left:10px;" type="checkbox" name="friend" value="friend" checked>Friends
+              <input style="margin-left:10px;" type="checkbox" name="acquaintance" value="acquaintance">Acquaintances
+              <input style="margin-left:10px;" type="checkbox" name="unconnected" value="unconnected" id="broadcast_checkbox">Broadcast
+            </div>
+
+            <div id="select-category" class="form-group hide">
+              Categories:
+              <%foundCategories.forEach(function(Category){%>
+                <input style="margin-left:10px;" type="checkbox" name="category" value="<%=Category.name%>"><%=Category.name%>
+              <%})%>
+
+            </div>
+
+            <div class="form-group">
+              Groups:
+              <%foundGroups.forEach(function(Group){%>
+                <input style="margin-left:10px;" type="checkbox" name="Group-<%=Group._id%>" value="<%=Group.name%>"><%=Group.name%>
+              <%})%>
+
+            </div>
+
+
+            <div style="text-align:center">
+              <button style="background:none;border:none">Submit</button>
+            </div>
+
+
+
+
+
+          </form>
+        </div>
+
+
+
+
+
+          <%foundPipes.forEach(function(Pipe){%>
+            <div class="main-section-item">
+              <div class="main-section-item-author main-section-subitem"><%=Pipe.activity_caption%></div>
+              <div class="main-section-item-author main-section-subitem"><a href="#"><%=Pipe.post.author.username%></a></div>
+              <div class="main-section-item-post main-section-subitem"><%=Pipe.post.post%></div>
+
+              <div class="main-section-item-post-image main-section-subitem">
+                <%Pipe.post.images.forEach(function(Image, index){%>
+                  <div class="main-section-item-post-image-subitem">
+                    <a href="/<%=currentUser._id%>/post/<%=Pipe.post._id%>/image/<%=index%>"><img width=500px src="data:image/png;base64,<%=Image["base64"]%>"></a>
+                  </div>
+                <%})%>
+              </div>
+
+              <div class="main-section-item-qty-price-comments main-section-subitem">
+                <%if(Pipe.post["type_of_post"] == "inventory"){%>
+                  <div class="main-section-item-qty-price-comments-subitem">Quantity: <span id="quantity"><%=Pipe.post.quantity%></span></div>
+                  <div class="main-section-item-qty-price-comments-subitem">Price: <span id="price"><%=Pipe.post.price%></span></div>
+                <%}%>
+                <div class="main-section-item-qty-price-comments-subitem"><a href="/<%=currentUser._id%>/post/<%=Pipe.post._id%>/comment">Comments</a></div>
+                <div class="main-section-item-qty-price-comments-subitem"><a href="/<%=currentUser._id%>/post/<%=Pipe.post._id%>/share">Share</a></div>
+              </div>
+
+              <%if(Pipe.post["type_of_post"] == "inventory"){%>
+                <div class="main-section-item-block-form main-section-subitem">
+                  <form action="/<%=currentUser._id%>/post/<%=Pipe.post._id%>/block" method="POST">
+                    <div class="form-flex form-group">
+                      <input class="form-flex-item form-control" type="text" name="quantity" placeholder="Enter quantity to Block">
+                      <button class="form-flex-item btn btn-primary" style="background: black;">Block</button>
+                    </div>
+                  </form>
+                </div>
+              <%}%>
+
+
+            </div>
+
+          <%})%>
+
+
+
+
+
+
+
+
+      </div>
+
+      <div class="right-nav">
+
+      </div>
+
+    </div>
+
+    <script type="text/javascript" src="/javascript/users-home.js">
+
+    </script>
+
+<% include ../partials/footer %>
